@@ -1,0 +1,58 @@
+# Podcast Analytics ETL Configuration
+
+# S3 Configuration
+s3:
+  source_bucket: "spotify-task-bucket"  # Source bucket for raw data
+  bronze_bucket: "spotify-task-bucket"  # Bronze data layer bucket
+  silver_bucket: "spotify-task-bucket"  # Silver data layer bucket
+  gold_bucket: "spotify-task-bucket"    # Gold data layer bucket
+  source_prefix: "Bronze1/"             # Source prefix for raw data files
+  bronze_prefix: "bronze_layer/"        # Bronze data layer
+  silver_prefix: "silver_layer/"        # Silver data layer
+  gold_prefix: "gold_layer/"            # Gold data layer
+
+# File Configuration
+files:
+  zip_file: "100k.zip"  # Name of the compressed podcast data file
+  xml_file: "feed.xml"  # Name of the podcast RSS feed file
+
+# Processing Configuration
+processing:
+  temp_dir: "/tmp/podcast_processing"  # Temporary directory for processing files
+  batch_size: 10000                    # Number of records to process in each batch
+  max_workers: 4                       # Number of parallel workers for processing
+
+# Database Configuration
+database:
+  type: "postgres"                     # Database type
+  schema: "podcast_analytics"          # Database schema name
+  podcast_table: "podcasts"            # Table for podcast metadata
+  episodes_table: "episodes"           # Table for episode data
+  streams_table: "streams"             # Table for streaming data
+  users_table: "users"                 # Table for user data
+
+trino:
+  host: localhost
+  port: 8080
+  user: trino_user
+  catalog: memory  # switch to hive when want to use big data
+  schema: podcast_analytics
+  http_scheme: http  # <- make sure this is HTTP
+
+
+
+# Analysis Configuration
+analysis:
+  time_window_days: 30                 # Time window for trend analysis
+  min_stream_count: 100                # Minimum stream count for analysis
+  engagement_threshold: 0.6            # Minimum engagement for analysis
+  clustering:
+    n_clusters: 5                      # Number of clusters for user segmentation
+    random_state: 42                   # Random seed for reproducibility
+
+# Visualization Configuration
+visualization:
+  theme: "light"                       # Theme for visualizations
+  colors: ["#4C78A8", "#F58518", "#E45756", "#72B7B2", "#54A24B", "#EECA3B"]
+  max_dashboard_items: 10              # Maximum number of items per dashboard
+  report_format: "markdown"            # Format for reports (markdown, html, pdf)
